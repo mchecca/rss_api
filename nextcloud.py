@@ -83,7 +83,6 @@ def folders():
 
 
 def _item_to_json(i):
-    pubDate = datetime.datetime.fromisoformat(i.pubDate)
     return {
         'id': i.id,
         'guid': i.guid,
@@ -91,12 +90,12 @@ def _item_to_json(i):
         'url': i.url,
         'title': i.title,
         'author': i.author,
-        'pubDate': pubDate,
+        'pubDate': datetime.datetime.fromisoformat(i.pubDate),
         'body': i.content,
         'feedId': i.feed_id,
         'unread': not i.read,
         'starred': i.starred,
-        'lastModified': pubDate,
+        'lastModified': i.updated,
     }
 
 
@@ -175,21 +174,21 @@ def items_updated():
     items_query = None
     if type_ == 0:
         items_query = models.Item.select().where(
-            (models.Item.feed_id == id_) & (models.Item.pubDate >= lastModified)
+            (models.Item.feed_id == id_) & (models.Item.updated >= lastModified)
         )
     elif type_ == 1:
         feed_ids = [f.id for f in models.Feed.select(models.Feed.id).where(
-            (models.Feed.folder_id == 1) & (models.Item.pubDate >= lastModified)
+            (models.Feed.folder_id == 1) & (models.Item.updated >= lastModified)
         )]
         items_query = models.Item.select().where(
-            (models.Item.feed_id.in_(feed_ids)) & (models.Item.pubDate >= lastModified)
+            (models.Item.feed_id.in_(feed_ids)) & (models.Item.updated >= lastModified)
         )
     elif type_ == 2:
         items_query = models.Item.select().where(
-            (models.Item.starred) & (models.Item.pubDate >= lastModified)
+            (models.Item.starred) & (models.Item.updated >= lastModified)
         )
     elif type_ == 3:
-        items_query = models.Item.select().where(models.Item.pubDate >= lastModified)
+        items_query = models.Item.select().where(models.Item.updated >= lastModified)
     else:
         logging.exception(Exception('Unknown type: {0}'.format(type_)))
         flask.abort(500)

@@ -1,5 +1,6 @@
 """RSS API Models."""
 
+import datetime
 import os
 
 import peewee
@@ -24,6 +25,13 @@ def authorized_user(username, password):
 
 class BaseModel(peewee.Model):
     """Base Model for RSS API classes."""
+
+    updated = peewee.DateTimeField(default=datetime.datetime.utcnow())
+
+    def save(self, *args, **kwargs):
+        """Save model and set updated field."""
+        self.updated = datetime.datetime.utcnow()
+        super().save(*args, **kwargs)
 
     class Meta:
         """Metadata for BaseModel."""
