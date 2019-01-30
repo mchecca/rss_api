@@ -1,0 +1,13 @@
+database: rss.sqlite
+
+users:
+  - username: username
+    password: password
+
+folders:
+  - name: FOLDER_NAME
+
+feeds:
+  - name: FEED_NAME
+    url: FEED_URL
+    folder: FOLDER_NAME

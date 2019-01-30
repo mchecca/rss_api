@@ -1,0 +1,4 @@
+feedparser==5.2.1
+flask==1.0.2
+peewee==3.8.2
+pyaml==18.11.0
