@@ -21,7 +21,10 @@ _SCRAPE_DELAY_MINUTES = 15
 def _run_scraper():
     while True:
         logging.info('Scraping all feeds')
-        scraper.scrape_all_feeds()
+        try:
+            scraper.scrape_all_feeds()
+        except Exception as ex:
+            logging.exception('Unhandled exception while scraping')
         next_scrape = datetime.datetime.now() + datetime.timedelta(minutes=_SCRAPE_DELAY_MINUTES)
         logging.info('Sleeping for {0} minutes, next scrape at {1}'.format(
             _SCRAPE_DELAY_MINUTES,
