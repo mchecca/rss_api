@@ -12,7 +12,12 @@ def scrape_all_feeds():
     """Scrapes all available feeds for new entries."""
     for f in models.Feed.select():
         logging.info('Getting feeds for {0} from {1}'.format(f.name, f.url))
-        for e in feedparser.parse(f.url)['entries']:
+        fp = feedparser.parse(f.url)
+        f.title, f.link = fp.feed.title, fp.feed.link
+        f.faviconLink = fp.feed.icon.rstrip('/')
+        if f.dirty_fields:
+            f.save(only=f.dirty_fields)
+        for e in fp['entries']:
             if not models.Item.get_or_none(guid=e.guid):
                 models.Item.create(
                     guid=e.guid,

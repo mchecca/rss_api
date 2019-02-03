@@ -64,7 +64,8 @@ def feeds():
             'url': f.url,
             'title': f.name,
             'folderId': f.folder_id,
-            'faviconLink': None,
+            'faviconLink': f.faviconLink,
+            'link': f.link,
         })
     # TODO: Add newestItemId if there are new items
     return json_response({'feeds': feeds})

@@ -51,6 +51,9 @@ class Feed(BaseModel):
     name = peewee.CharField(unique=True)
     url = peewee.CharField()
     folder = peewee.ForeignKeyField(Folder)
+    link = peewee.CharField(null=True)
+    title = peewee.CharField(null=True)
+    faviconLink = peewee.CharField(null=True)
 
 
 class Item(BaseModel):
