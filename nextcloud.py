@@ -1,10 +1,10 @@
 """Nextcloud News API implementation."""
 
 import base64
-import datetime
 import logging
 import time
 
+import dateutil.parser
 import flask
 import models
 from utils import json_response
@@ -84,6 +84,7 @@ def folders():
 
 
 def _item_to_json(i):
+    pubDate = dateutil.parser.parse(str(i.pubDate))
     return {
         'id': i.id,
         'guid': i.guid,
@@ -91,7 +92,7 @@ def _item_to_json(i):
         'url': i.url,
         'title': i.title,
         'author': i.author,
-        'pubDate': i.pubDate,
+        'pubDate': pubDate,
         'body': i.content,
         'feedId': i.feed_id,
         'unread': not i.read,
