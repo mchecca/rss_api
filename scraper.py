@@ -3,6 +3,7 @@
 import datetime
 import logging
 import pprint
+import time
 
 import feedparser
 
@@ -34,7 +35,7 @@ def scrape_all_feeds():
                         title=e.title,
                         author=e.get('author', 'N/A'),
                         content=e.content[0]['value'],
-                        pubDate=datetime.datetime.fromisoformat(e.updated),
+                        pubDate=datetime.datetime.fromtimestamp(time.mktime(e.updated_parsed)),
                         feed=f,
                         unread=True,
                         starred=False

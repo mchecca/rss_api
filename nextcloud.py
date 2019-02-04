@@ -91,7 +91,7 @@ def _item_to_json(i):
         'url': i.url,
         'title': i.title,
         'author': i.author,
-        'pubDate': datetime.datetime.fromisoformat(i.pubDate),
+        'pubDate': i.pubDate,
         'body': i.content,
         'feedId': i.feed_id,
         'unread': not i.read,
