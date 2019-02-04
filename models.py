@@ -55,6 +55,14 @@ class Feed(BaseModel):
     title = peewee.CharField(null=True)
     faviconLink = peewee.CharField(null=True)
 
+    def auth(self):
+        """Get authentication info if applicable."""
+        auth = None
+        feed = [f for f in _settings_dict['feeds'] if f['name'] == self.name][0]
+        if 'username' in feed and 'password' in feed:
+            auth = (feed['username'], feed['password'])
+        return auth
+
 
 class Item(BaseModel):
     """Item model."""

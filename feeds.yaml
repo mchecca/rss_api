@@ -11,3 +11,5 @@ feeds:
   - name: FEED_NAME
     url: FEED_URL
     folder: FOLDER_NAME
+    username: USERNAME
+    password: PASSWORD

@@ -6,6 +6,7 @@ import pprint
 import time
 
 import feedparser
+import requests
 
 import models
 
@@ -15,7 +16,11 @@ def scrape_all_feeds():
     for f in models.Feed.select():
         logging.info('Getting feeds for {0} from {1}'.format(f.name, f.url))
         try:
-            fp = feedparser.parse(f.url)
+            auth = f.auth()
+            fp_in = f.url
+            if auth:
+                fp_in = requests.get(f.url, auth=auth).text
+            fp = feedparser.parse(fp_in)
             if 'title' in fp.feed:
                 f.title = fp.feed.title
             if 'link' in fp.feed:
