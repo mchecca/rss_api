@@ -2,6 +2,7 @@
 
 import datetime
 import logging
+import pprint
 
 import feedparser
 
@@ -23,7 +24,7 @@ def scrape_all_feeds():
             if f.dirty_fields:
                 f.save(only=f.dirty_fields)
         except Exception as e:
-            logging.exception('Error updating feed')
+            logging.exception('Error updating feed\n{0}'.format(pprint.pformat(f)))
         for e in fp['entries']:
             try:
                 if not models.Item.get_or_none(guid=e.guid):
@@ -39,7 +40,7 @@ def scrape_all_feeds():
                         starred=False
                     )
             except Exception as ex:
-                logging.exception('Error processing feed entry')
+                logging.exception('Error processing feed entry\n{0}'.format(pprint.pformat(e)))
 
 
 if __name__ == '__main__':
