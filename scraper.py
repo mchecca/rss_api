@@ -29,12 +29,13 @@ def scrape_all_feeds():
         for e in fp['entries']:
             try:
                 if not models.Item.get_or_none(guid=e.guid):
+                    content = content = e.content[0]['value'] if 'content' in e else ''
                     models.Item.create(
                         guid=e.guid,
                         url=e.link,
                         title=e.title,
                         author=e.get('author', 'N/A'),
-                        content=e.content[0]['value'],
+                        content=content,
                         pubDate=datetime.datetime.fromtimestamp(time.mktime(e.updated_parsed)),
                         feed=f,
                         unread=True,
