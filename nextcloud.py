@@ -115,7 +115,9 @@ def items():
     if type_ == 0:
         items_query = items_query.where(models.Item.feed_id == id_)
     elif type_ == 1:
-        items_query = items_query.where(models.Item.starred)
+        feed_ids = [f.id for f in models.Feed.select(models.Feed.id).where(
+            models.Feed.folder_id == id_)]
+        items_query = items_query.where(models.Item.feed_id.in_(feed_ids))
     elif type_ == 2:
         items_query = items_query.where(models.Item.starred)
     elif type_ == 3:
