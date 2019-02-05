@@ -7,6 +7,7 @@ import threading
 import time
 
 import flask
+import models
 import nextcloud
 import scraper
 import settings
@@ -14,6 +15,17 @@ import settings
 app = flask.Flask(__name__)
 app.register_blueprint(nextcloud.api)
 app.register_blueprint(nextcloud.base_api)
+
+
+@app.before_request
+def authenticate():
+    """Authenticate a Nextcloud News user."""
+    auth = flask.request.authorization
+    if auth:
+        if models.authorized_user(auth.username, auth.password):
+            return
+    return flask.Response('Authentication Required', 401, headers={
+            'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 
 def _run_scraper():

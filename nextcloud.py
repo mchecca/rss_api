@@ -14,17 +14,6 @@ base_api = flask.Blueprint('nextcloud_base', __name__, url_prefix='/index.php/ap
 api = flask.Blueprint('nextcloud', __name__, url_prefix='/index.php/apps/news/api/v1-2')
 
 
-@api.before_request
-def authenticate():
-    """Authenticate a Nextcloud News user."""
-    auth = flask.request.authorization
-    if auth:
-        if models.authorized_user(auth.username, auth.password):
-            return
-    return flask.Response('Authentication Required', 401, headers={
-            'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-
 @base_api.route('/')
 def index():
     """Index page."""
