@@ -1,4 +1,5 @@
 database: rss.sqlite
+scrape_interval: 15
 
 users:
   - username: username

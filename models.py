@@ -1,26 +1,18 @@
 """RSS API Models."""
 
 import datetime
-import os
 
 import peewee
-import yaml
 
-_FOLDER_BASE = os.path.dirname(__file__)
-_SETTINGS_FILE = os.environ.get('RSS_CONFIG_FILE', 'feeds.yaml')
-assert os.path.exists(_SETTINGS_FILE) and os.access(_SETTINGS_FILE, os.R_OK)
+import settings
 
-_settings_dict = yaml.load(open(_SETTINGS_FILE, 'r'))
-_database_file = os.path.abspath(_settings_dict['database'])
 
-db = peewee.SqliteDatabase(_database_file)
-
-USERS = {u['username']: u['password'] for u in _settings_dict.get('users', {})}
+db = peewee.SqliteDatabase(settings.DATABASE_FILE)
 
 
 def authorized_user(username, password):
     """Check if the specified username and password are authorized."""
-    return username in USERS and USERS[username] == password
+    return username in settings.USERS and settings.USERS[username] == password
 
 
 class BaseModel(peewee.Model):
@@ -58,7 +50,7 @@ class Feed(BaseModel):
     def auth(self):
         """Get authentication info if applicable."""
         auth = None
-        feed = [f for f in _settings_dict['feeds'] if f['name'] == self.name][0]
+        feed = [f for f in settings.FEEDS if f['name'] == self.name][0]
         if 'username' in feed and 'password' in feed:
             auth = (feed['username'], feed['password'])
         return auth
@@ -82,8 +74,8 @@ db.connect()
 db.create_tables([Folder, Feed, Item])
 
 # Make sure all folders and feeds from the settings file are added
-for fid, f in enumerate(_settings_dict.get('folders', [])):
+for fid, f in enumerate(settings.FOLDERS):
     Folder.get_or_create(name=f['name'])
-for fid, f in enumerate(_settings_dict.get('feeds', [])):
+for fid, f in enumerate(settings.FEEDS):
     folder = Folder.get(name=f['folder'])
     Feed.get_or_create(name=f['name'], url=f['url'], folder=folder)

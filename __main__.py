@@ -9,13 +9,11 @@ import time
 import flask
 import nextcloud
 import scraper
+import settings
 
 app = flask.Flask(__name__)
 app.register_blueprint(nextcloud.api)
 app.register_blueprint(nextcloud.base_api)
-
-
-_SCRAPE_DELAY_MINUTES = 15
 
 
 def _run_scraper():
@@ -25,12 +23,12 @@ def _run_scraper():
             scraper.scrape_all_feeds()
         except Exception as ex:
             logging.exception('Unhandled exception while scraping')
-        next_scrape = datetime.datetime.now() + datetime.timedelta(minutes=_SCRAPE_DELAY_MINUTES)
+        next_scrape = datetime.datetime.now() + datetime.timedelta(minutes=settings.SCRAPE_INTERVAL)
         logging.info('Sleeping for {0} minutes, next scrape at {1}'.format(
-            _SCRAPE_DELAY_MINUTES,
+            settings.SCRAPE_INTERVAL,
             next_scrape
         ))
-        time.sleep(_SCRAPE_DELAY_MINUTES * 60)
+        time.sleep(settings.SCRAPE_INTERVAL * 60)
 
 
 if __name__ == '__main__':
