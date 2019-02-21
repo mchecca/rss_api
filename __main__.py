@@ -7,6 +7,8 @@ import threading
 import time
 
 import flask
+import prometheus_flask_exporter
+
 import models
 import nextcloud
 import scraper
@@ -16,6 +18,7 @@ app = flask.Flask(__name__)
 app.register_blueprint(nextcloud.api)
 app.register_blueprint(nextcloud.base_api)
 
+metrics = prometheus_flask_exporter.PrometheusMetrics(app, path='/metrics')
 
 @app.before_request
 def authenticate():
@@ -49,4 +52,5 @@ if __name__ == '__main__':
     logging.info('Running RSS API at {0}:{1}'.format(host, port))
     t = threading.Thread(target=_run_scraper, daemon=True)
     t.start()
+    metrics.start_http_server(9100, '0.0.0.0')
     app.run(host=host, port=port, debug=False, use_evalex=False)
