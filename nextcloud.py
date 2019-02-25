@@ -1,6 +1,7 @@
 """Nextcloud News API implementation."""
 
 import base64
+import datetime
 import logging
 import time
 
@@ -161,7 +162,8 @@ def feed_read(feed_id):
 @api.route('/items/updated')
 def items_updated():
     """Get updated items."""
-    lastModified = int(flask.request.args['lastModified'])
+    lastModifiedSeconds = int(flask.request.args['lastModified'])
+    lastModified = datetime.datetime.fromtimestamp(lastModifiedSeconds)
     type_ = int(flask.request.args['type'])
     id_ = int(flask.request.args['id'])
     items_query = None
