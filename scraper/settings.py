@@ -14,5 +14,3 @@ _settings_dict = yaml.load(open(_SETTINGS_FILE, 'r'))
 DATABASE_FILE = os.path.abspath(_settings_dict['database'])
 FOLDERS = _settings_dict.get('folders', [])
 FEEDS = _settings_dict.get('feeds', [])
-SCRAPE_INTERVAL = _settings_dict['scrape_interval']
-USERS = {u['username']: u['password'] for u in _settings_dict.get('users', {})}

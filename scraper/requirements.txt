@@ -1,0 +1,4 @@
+feedparser==5.2.1
+peewee==3.8.2
+pyaml==18.11.0
+requests==2.21.0

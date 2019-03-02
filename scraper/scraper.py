@@ -48,7 +48,3 @@ def scrape_all_feeds():
                     )
             except Exception as ex:
                 logging.exception('Error processing feed entry\n{0}'.format(pprint.pformat(e)))
-
-
-if __name__ == '__main__':
-    scrape_all_feeds()

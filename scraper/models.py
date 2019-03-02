@@ -10,11 +10,6 @@ import settings
 db = peewee.SqliteDatabase(settings.DATABASE_FILE)
 
 
-def authorized_user(username, password):
-    """Check if the specified username and password are authorized."""
-    return username in settings.USERS and settings.USERS[username] == password
-
-
 class BaseModel(peewee.Model):
     """Base Model for RSS API classes."""
 
