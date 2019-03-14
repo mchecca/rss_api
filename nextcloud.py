@@ -115,7 +115,6 @@ def items():
     else:
         logging.exception(Exception('Unknown type: {0}'.format(type_)))
         flask.abort(500)
-    items = [_item_to_json(i) for i in items_query]
     if offset > 0:
         items_query = items_query.where(models.Item.id <= offset)
     if not getRead:
@@ -126,6 +125,7 @@ def items():
         items_query = items_query.order_by(models.Item.pubDate.desc())
     if batchSize > 0:
         items_query = items_query.limit(batchSize)
+    items = [_item_to_json(i) for i in items_query]
     return json_response({'items': items})
 
 
