@@ -4,4 +4,4 @@ peewee==3.8.2
 prometheus-flask-exporter==0.5.1
 pyaml==18.11.0
 python-dateutil==2.7.5
-requests==2.21.0
+requests==2.31.0
